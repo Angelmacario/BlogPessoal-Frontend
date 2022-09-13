@@ -1,8 +1,16 @@
 import React from 'react';
 import {Typography, Box, Grid, Button} from '@mui/material';
 import './Home.css';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../store/tokens/tokenReducer';
+import { Link } from 'react-router-dom';
 
 function Home() {
+    
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+    );
+    
     return (
         <>
             <Grid container direction="row" justifyContent="center" alignItems="center" style={{ backgroundColor: "#3F51B5" }}>
@@ -14,7 +22,9 @@ function Home() {
                     <Box display="flex" justifyContent="center">
                         <Box marginRight={1}>
                         </Box>
-                        <Button variant="outlined" style={{ borderColor: "white", backgroundColor: "#3F51B5", color: "white" }}>Ver Postagens</Button>
+                         <Link to="/posts" className="text-decorator-none">
+                                <Button variant="outlined" style={{ borderColor: "white", backgroundColor: "#3F51B5", color: "white" }}>Ver Postagens</Button>
+                        </Link>
                     </Box>
                 </Grid>
                 <Grid item xs={6} >

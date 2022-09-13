@@ -4,13 +4,18 @@ import { Box, Card, CardActions, CardContent, Button, Typography } from '@materi
 import './ListaPostagem.css';
 import Postagem from '../../../models/Postagem';
 import { TenMpSharp } from '@mui/icons-material';
-import useLocalStorage from 'react-use-localstorage';
 import { busca } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokenReducer';
+import { useHistory } from 'react-router-dom';
 
 function ListaPostagem() {
   const [posts, setTemas] = useState<Postagem[]>()
-  const [token, setToken] = useLocalStorage('token');
   let history = useHistory();
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+    (state) => state.tokens
+);
+
 
   useEffect(()=>{
     if(token = ''){

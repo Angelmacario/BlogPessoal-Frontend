@@ -6,11 +6,14 @@ import { login } from '../../services/Service';
 import UserLogin from '../../models/UserLogin';
 import'./Login.css';
 import { Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { addToken } from "../../store/tokens/actions";
 
 function Login(){
 
     let history = useNavigate();
-    const [token, setToken] = useLocalStorage('token');
+    const dispatch = useDispatch();
+    const [token, setToken] = useState('');
     const [userLogin, setUserLogin] = useState<UserLogin>( // minha model
         {
                 id: 0,
@@ -30,6 +33,7 @@ function Login(){
 
             useEffect(()=>{
                 if(token != ''){ //diferente
+                    dispatch(addToken(token));
                     navigate.push('/home')
                 }
             }, [token])

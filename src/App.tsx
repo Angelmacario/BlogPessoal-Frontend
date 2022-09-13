@@ -8,11 +8,13 @@ import Login from './paginas/login/Login';
 import './App.css';
 import ListaTema from './components/temas/listatema/ListaTema';
 import ListaPostagem from './components/postagens/listapostagem/ListaPostagem';
-
+import {Provider} from 'react-redux';
+import store from './store/store';
 
 function App() {
   return (
   <>
+  <Provider store={store}>
    <Navbar />
       <Home />
         <Footer />
@@ -48,8 +50,8 @@ function App() {
           <Route path="/formularioTema/:id" element={<CadastroTema />} />
           <Route path="/deletarPostagem/:id" element={<DeletarPostagem />} />
           <Route path="/deletarTema/:id" element={<DeletarTema />} />
-    
   </div>
+    </Provider>
   </>
   );
 }

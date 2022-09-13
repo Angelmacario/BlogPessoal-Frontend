@@ -21,9 +21,9 @@ function CadastroPost() {
         }
     }, [token])
 
-    const [tema, setTema] = useState<Tema>(
+    const [tema, setTema] = useState<Tema>( //array que fazemos para escolher os objetos
         {
-            id: 0,
+            id: 0, 
             descricao: ''
         })
     const [postagem, setPostagem] = useState<Postagem>({
