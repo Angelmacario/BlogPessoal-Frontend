@@ -1,15 +1,23 @@
-import React , {useState, useEffect, ChangeEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import { Box } from '@mui/material';
+
+import { Link, useNavigate } from 'react-router-dom';
+import { ChangeEvent, useEffect, useState } from "react";
+
+
+import './CadastroUsuario.css';
 import User from '../../models/User';
 import { cadastroUsuario } from '../../services/Services';
-import { Grid, Box, Typography, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import './CadastroUsuario.css';
+
+
+import { toast } from 'react-toastify';
 
 function CadastroUsuario() {
 
-    let history = useHistory();
+    let navigate = useNavigate();
+
     const [confirmarSenha,setConfirmarSenha] = useState<String>("")
+    
     const [user, setUser] = useState<User>(
         {
             id: 0,
@@ -30,7 +38,7 @@ function CadastroUsuario() {
 
     useEffect(() => { // será acionado após envio dos dados
         if (userResult.id != 0) {
-            history.push("/login")
+            navigate("/login")
         }
     }, [userResult])
 
@@ -45,20 +53,49 @@ function CadastroUsuario() {
         })
         }
 
-        async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
+     async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
         e.preventDefault() //ele previne o comportamento, e diz se o ovalor dasenha está sendo correspondente ou não
 
-        if(confirmarSenha == user.senha){
-        cadastroUsuario(`/usuarios/cadastrar`, user, setUserResult)
-        alert('Usuario cadastrado com sucesso')
+         if(confirmarSenha == user.senha){
+            toast.error('Dados inválidos!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
 
-        }else{
-
-        alert('Dados inconsistentes. Favor verificar as informações de cadastro.')
-       
-        }
-        }
-
+        }else if (confirmarSenha === user.senha) {
+            cadastroUsuario(`/usuarios/cadastrar`, user, setUserResult)
+            toast.success('🦄 Usuário cadastrado com sucesso!', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              });
+        
+        } else {
+                toast.error('Dados inconsistentes. Favor verificar as informações de cadastro! ', {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,// pausar após passar o mouse
+                  draggable: true,//mover a notificacao de local 
+                  progress: undefined,
+                  theme: "dark",
+                  });
+              }
+        
+          }
+        
 
     return (
         <Grid container direction='row' justifyContent='center' alignItems='center'>

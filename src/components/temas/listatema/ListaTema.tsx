@@ -1,24 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Box, Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
+
 import './ListaTema.css';
 import Tema from '../../../models/Tema';
-import { TenMpSharp } from '@mui/icons-material';
-import useLocalStorage from 'react-use-localstorage';
-import { busca } from '../../../services/Service';
+
+import { busca } from '../../../services/Services';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+
+import { toast } from 'react-toastify';
 
 function ListaTema() {
+  
   const [temas, setTemas] = useState<Tema[]>()
-  const [token, setToken] = useLocalStorage('token');
-  let history = useHistory();
 
-  useEffect(()=>{
-    if(token = ''){
-      alert("Você precisa estar logado")
-      history.push("/login")
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+    (state) => state.tokens
+  );
+
+   let navigate = useNavigate();
+
+   useEffect(() => {
+    if(token === ''){
+      toast.error('Você precisa estar logado !', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+      navigate('/login')
     }
-  }, [token])
-
+  }, [token]);
 
   async function getTema(){
     await busca("/tema", setTemas, {
@@ -28,11 +45,17 @@ function ListaTema() {
     })
   }
 
+  async function getTema() {
+    await busca("/temas", setTemas, {
+      headers: {
+        'Authorization': token
+      }
+    } )
+  }
 
-  useEffect(()=>{
-    getTema()
+  useEffect(() => {
+    getTema();
   }, [temas.length])
-
 
   return (
     <>

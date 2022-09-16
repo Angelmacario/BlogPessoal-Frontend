@@ -1,27 +1,44 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom'
+
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css'
+
 import { useDispatch, useSelector } from 'react-redux';
 import { TokenState } from '../../../store/tokens/tokenReducer';
 import { addToken } from '../../../store/tokens/action';
 
+import { toast } from 'react-toastify';
+
 function Navbar() {
     
+    // quem vai disparar a ação, para enviar nosso token ao store
     const token = useSelector<TokenState, TokenState["tokens"]>(
         (state) => state.tokens
     );
-    let history = useHistory();
+    let history = useNavigate();
     const dispatch = useDispatch();
     
+    //function que irá deslogar o usuário através da remoção do token
      function goLogout(){
         dispatch(addToken(''));
-        alert("USuário deslogado")
-        history.push('/login')
+
+        toast.success(' Usuário deslogado!', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,// pausar após passar o mouse
+            draggable: true,//mover a notificacao de local 
+            progress: undefined,
+            theme: "dark",
+            });
+          
+          navigate('/login')
      }
 
-    var navbarComponent;
+    let navbarComponent;
 
     if(token != ""){ //se houver um token eu vou ser rederizado
         navbarComponent =  <AppBar position="static"> //navbar ta revebendo todo o componete

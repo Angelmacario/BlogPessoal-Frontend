@@ -1,11 +1,21 @@
-import React from 'react';
-import {Typography, Box, Grid, Button} from '@mui/material';
-import './Home.css';
-import { useSelector } from 'react-redux';
-import { TokenState } from '../../store/tokens/tokenReducer';
-import { Link } from 'react-router-dom';
+import { Typography } from "@material-ui/core";
+import { Box, Button, Grid } from "@mui/material";
 
+// Importacao diferente do video
+import React, { useEffect } from "react";
+
+import "./Home.css";
+import TabPostagem from "../../components/postagens/tabPostagens/TabPostagem";
+import ModalPostagem from "../../components/postagens/modalPostagem/ModalPostagem";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+import { TokenState } from "../../store/tokens/tokensReducer";
+
+import { toast } from 'react-toastify';
 function Home() {
+
+  let navigate = useNavigate();
     
     const token = useSelector<TokenState, TokenState["tokens"]>(
         (state) => state.tokens

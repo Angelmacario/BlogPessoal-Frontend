@@ -12,13 +12,17 @@ import { addToken } from "../../store/tokens/actions";
 function Login(){
 
     let history = useNavigate();
+
     const dispatch = useDispatch();
+    
     const [token, setToken] = useState('');
-    const [userLogin, setUserLogin] = useState<UserLogin>( // minha model
-        {
+    
+    const [userLogin, setUserLogin] = useState<UserLogin>({ // minha model
                 id: 0,
+                nome: '',
                 usuario: '',
                 senha: '',
+                foto: '',
                 token: '',
         }
         ) // valores iniciais do state

@@ -1,23 +1,39 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Container, Typography, TextField, Button, Select, InputLabel, MenuItem, FormControl, FormHelperText } from "@material-ui/core"
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+
 import './CadastroPost.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import Tema from '../../../models/Tema';
-import useLocalStorage from 'react-use-localstorage';
+import Tema from '../../../models/Tema';;
 import Postagem from '../../../models/Postagem';
 import { busca, buscaId, post, put } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+
+import { toast } from 'react-toastify';
 
 function CadastroPost() {
-    let history = useNavigate();
+    let navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
+
     const [temas, setTemas] = useState<Tema[]>([])
-    const [token, setToken] = useLocalStorage('token');
+
+    const token =useSelector< = TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+    );
 
     useEffect(() => {
         if (token == "") {
-            alert("Você precisa estar logado")
-            history("/login")
-
+            toast.error('Você precisa estar logado !', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
+            navigate("/login")
         }
     }, [token])
 
@@ -82,7 +98,18 @@ function CadastroPost() {
                     'Authorization': token
                 }
             })
-            alert('Postagem atualizada com sucesso');
+            toast.success(' Postagem atualizado com sucesso!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,// parar após passar o mouse
+                draggable: true,//mudar a notificacao de lugar
+                progress: undefined,
+                theme: "dark",
+                });
+        
+        
         } else {
             post(`/Postagem`, postagem, setPostagem, {
                 headers: {
@@ -96,7 +123,7 @@ function CadastroPost() {
     }
 
     function back() {
-        history('/Postagem')
+        Navigate('/Postagem')
     }
 
     return (

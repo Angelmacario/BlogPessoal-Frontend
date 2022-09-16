@@ -1,32 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
+import { Link, useNavigate } from 'react-router-dom';
+
 import './ListaPostagem.css';
+import { Box, Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import Postagem from '../../../models/Postagem';
 import { TenMpSharp } from '@mui/icons-material';
-import { busca } from '../../../services/Service';
+import { busca,post } from '../../../services/Service';
 import { useSelector } from 'react-redux';
 import { TokenState } from '../../../store/tokens/tokenReducer';
-import { useHistory } from 'react-router-dom';
+
+import CardPost from "../cardPostagem/CardPost";
+
+import { toast } from 'react-toastify';
 
 function ListaPostagem() {
-  const [posts, setTemas] = useState<Postagem[]>()
-  let history = useHistory();
+  const [postagem, setPostagem] = useState<Postagem[]>([]);
+
   const token = useSelector<TokenState, TokenState["tokens"]>(
     (state) => state.tokens
 );
 
+let navigate = useNavigate();
 
-  useEffect(()=>{
-    if(token = ''){
-      alert("Você precisa estar logado")
-      history.push("/login")
-    }
-  }, [token])
+useEffect(() => {
+  if (token === "") {
+    toast.error('Você precisa estar logado !', {
+           position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+
+    navigate("/login");
+  }
+}, [token]);
 
 
   async function getPost(){
-    await busca("/postagens", setPosts, {
+    await busca("/postagens", setPostagem, {
       headers: {
         'Authorization': token
       }
@@ -36,55 +51,16 @@ function ListaPostagem() {
 
   useEffect(()=>{
     getPost()
-  }, [posts.length])
+  }, [postagem.length])
 
 
   return (
     <>
-    {
-      posts.map(post =>(
-      <Box m={2} >
-        <Card variant="outlined">
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Postagens
-              </Typography>
-            <Typography variant="h5" component="h2">
-              {post.titulo}
-              </Typography>
-            <Typography variant="h5" component="h2">
-              {post.texto}
-            </Typography>
-            <Typography variant="h5" component="h2">
-              {post.tema?.descricao}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Box display="flex" justifyContent="center" mb={1.5} >
-
-              <Link to={`/formularioPostagem/${post.id}`} className="text-decorator-none">
-                <Box mx={1}>
-                  <Button variant="contained" className="marginLeft" size='small' color="primary" >
-                    atualizar
-                  </Button>
-                </Box>
-              </Link>
-              <Link to={`/deletarPostagem/${post.id}`} className="text-decorator-none">
-                <Box mx={1}>
-                  <Button variant="contained" size='small' color="secondary">
-                    deletar
-                  </Button>
-                </Box>
-              </Link>
-            </Box>
-          </CardActions>
-        </Card>
-      </Box>
-      ))
-    }
+    {postagem.map((posts) => (
+        <CardPost objetoPost={posts} />
+      ))}
     </>
   );
 }
 
-
-export default ListaTema;
+export default ListaPostagem;

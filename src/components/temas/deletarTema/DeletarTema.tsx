@@ -1,24 +1,44 @@
 import React, { useEffect, useState } from 'react'
-import {Box, Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
-import './DeletarTema.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'react-use-localstorage';
+
+import {Box, Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
+
+import './DeletarTema.css';
+import { buscaId, deleteId } from '../../../services/Services';
 import Tema from '../../../models/Tema';
-import { buscaId, deleteId } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+
+import { toast } from 'react-toastify';
 
 
 function DeletarTema() {
+
   let history = useNavigate();
+
   const { id } = useParams<{id: string}>();
-  const [token, setToken] = useLocalStorage('token');
+
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+      (state) => state.tokens
+    );
+
   const [tema, setTema] = useState<Tema>()
 
-  useEffect(() => {
-      if (token == "") {
-          alert("Você precisa estar logado")
-          history("/login")
-  
-      }
+   useEffect(() => {
+    if(token === "") {
+      toast.error('Você precisa estar logado !', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+      navigate("/login")
+    }
   }, [token])
 
   useEffect(() =>{
@@ -35,51 +55,75 @@ function DeletarTema() {
         })
       }
 
-      function sim() {
-          history('/Tema')
-          deleteId(`/Tema/${id}`, {
+      async function sim() {
+        navigate('/temas')
+    
+        try {
+         await deleteId(`/temas/${id}`, {
             headers: {
               'Authorization': token
             }
-          });
-          alert('Tema deletado com sucesso');
+          })
+          toast.success('Tema deletado com sucesso!', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+    
+        } catch (error) {
+          toast.error('Erro ao deletar!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
         }
+      }
       
         function nao() {
           history('/Tema')
         }
         
-return (
-  <>
-    <Box m={2}>
-      <Card variant="outlined">
-        <CardContent>
-          <Box justifyContent="center">
-            <Typography color="textSecondary" gutterBottom>
-              Deseja deletar o Tema:
-            </Typography>
-            <Typography color="textSecondary">
-              {tema?.descricao}
-            </Typography>
-          </Box>
-        </CardContent>
-        <CardActions>
-          <Box display="flex" justifyContent="start" ml={1.0} mb={2} >
-            <Box mx={2}>
-              <Button onClick={sim} variant="contained" className="marginLeft" size='large' color="primary">
-                Sim
-              </Button>
+ return (
+    <>
+      <Box m={2}>
+        <Card variant="outlined">
+          <CardContent>
+            <Box justifyContent="center">
+              <Typography gutterBottom>
+                Deseja deletar o Tema:
+              </Typography>
+              <Typography>
+                {tema?.descricao}
+              </Typography>
             </Box>
-            <Box mx={2}>
-              <Button  onClick={nao} variant="contained" size='large' color="secondary">
-                Não
-              </Button>
+          </CardContent>
+          <CardActions>
+            <Box display="flex" justifyContent="start" ml={1.0} mb={2} >
+              <Box mx={2}>
+                <Button onClick={sim} variant="contained" className="marginLeft btnSim" size='large' >
+                  Sim
+                </Button>
+              </Box>
+              <Box mx={2}>
+                <Button onClick={nao} variant="contained" size='large' className='btnNao'>
+                  Não
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </CardActions>
-      </Card>
-    </Box>
-  </>
-);
+          </CardActions>
+        </Card>
+      </Box>
+    </>
+  );
 }
 export default DeletarTema;
