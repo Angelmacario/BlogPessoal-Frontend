@@ -130,7 +130,7 @@ function CadastroPost() {
     }
 
     function back() {
-        Navigate('/postagem')
+        navigate('/postagens')
     }
 
     return (
