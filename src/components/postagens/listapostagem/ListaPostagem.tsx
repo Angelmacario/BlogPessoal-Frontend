@@ -9,7 +9,7 @@ import { busca,post } from '../../../services/Service';
 import { useSelector } from 'react-redux';
 import { TokenState } from '../../../store/tokens/tokenReducer';
 
-import CardPost from "../cardPostagem/CardPost";
+import CardPostagem from "../../postagens/cardPostagem/CardPostagem";
 
 import { toast } from 'react-toastify';
 
@@ -57,7 +57,7 @@ useEffect(() => {
   return (
     <>
     {postagem.map((posts) => (
-        <CardPost objetoPost={posts} />
+        <CardPostagem objetoPost={posts} />
       ))}
     </>
   );

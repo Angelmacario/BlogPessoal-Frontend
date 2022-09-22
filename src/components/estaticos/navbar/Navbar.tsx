@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css'
 
@@ -17,7 +17,8 @@ function Navbar() {
     const token = useSelector<TokenState, TokenState["tokens"]>(
         (state) => state.tokens
     );
-    let history = useNavigate();
+    
+    let navigate = useNavigate();
     const dispatch = useDispatch();
     
     //function que irá deslogar o usuário através da remoção do token
@@ -102,6 +103,4 @@ function Navbar() {
 
 export default Navbar;
 
-function setToken(arg0: string) {
-    throw new Error('Function not implemented.');
-}
+

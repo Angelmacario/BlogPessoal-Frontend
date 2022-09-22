@@ -5,7 +5,9 @@ interface Postagem{
     id: number;
     titulo: string;
     texto: string;
-    tema?: Tema| null // se for um objeto tema, se não for vai ser null
+    data: string;
+    tema?: Tema| null; // se for um objeto tema, se não for vai ser null
+    usuario?: User | null;
 }
 
 export default Postagem;

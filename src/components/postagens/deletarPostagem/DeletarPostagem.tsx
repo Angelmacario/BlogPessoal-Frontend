@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
-import {Typography, Button, Box, Card, CardActions, CardContent } from "@material-ui/core"
+import {Typography, Button, Card, CardActions, CardContent } from "@material-ui/core"
 
 import './DeletarPostagem.css';
 import Postagem from '../../../models/Postagem';
 import { buscaId, deleteId } from '../../../services/Service';
 import { useSelector } from 'react-redux';
-import { TokenState } from '../../../store/tokens/tokensReducer';
+import { TokenState } from '../../../store/tokens/tokenReducer';
 
 import { toast } from 'react-toastify';
 
 import './DeletarPost.css';
+import { Box } from '@mui/material';
 
 function DeletarPostagem() {
 
-  let history = useNavigate();
+  let navigate = useNavigate();
   const { id } = useParams<{id: string}>();
 
    const token = useSelector<TokenState, TokenState["tokens"]>(

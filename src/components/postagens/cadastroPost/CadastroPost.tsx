@@ -7,7 +7,7 @@ import Tema from '../../../models/Tema';;
 import Postagem from '../../../models/Postagem';
 import { busca, buscaId, post, put } from '../../../services/Service';
 import { useSelector } from 'react-redux';
-import { TokenState } from '../../../store/tokens/tokensReducer';
+import { TokenState } from '../../../store/tokens/tokenReducer';
 
 import { toast } from 'react-toastify';
 
@@ -17,7 +17,7 @@ function CadastroPost() {
 
     const [temas, setTemas] = useState<Tema[]>([])
 
-    const token =useSelector< = TokenState, TokenState["tokens"]>(
+    const token = useSelector < TokenState, TokenState ["tokens"]>(
         (state) => state.tokens
     );
 
@@ -46,7 +46,14 @@ function CadastroPost() {
         id: 0,
         titulo: '',
         texto: '',
-        tema: null
+        data: '',
+        tema: null,
+        usuario: { 
+            id:1,
+            nome: '',
+            usuario: '',
+            senha: ''
+        }
     })
 
     useEffect(() => { 
@@ -123,7 +130,7 @@ function CadastroPost() {
     }
 
     function back() {
-        Navigate('/Postagem')
+        Navigate('/postagem')
     }
 
     return (

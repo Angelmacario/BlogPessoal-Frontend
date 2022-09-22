@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'react-use-localstorage';
 
-import {Box, Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
+import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 
 import './DeletarTema.css';
-import { buscaId, deleteId } from '../../../services/Services';
+import { buscaId, deleteId } from '../../../services/Service';
 import Tema from '../../../models/Tema';
 import { useSelector } from 'react-redux';
-import { TokenState } from '../../../store/tokens/tokensReducer';
+import { TokenState } from '../../../store/tokens/tokenReducer';
 
 import { toast } from 'react-toastify';
+import { Box } from '@mui/material';
 
 
 function DeletarTema() {
 
-  let history = useNavigate();
+  let navigate = useNavigate();
 
   const { id } = useParams<{id: string}>();
 
@@ -90,7 +91,7 @@ function DeletarTema() {
       }
       
         function nao() {
-          history('/Tema')
+          navigate('/Tema')
         }
         
  return (
