@@ -7,7 +7,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 import './CadastroUsuario.css';
 import User from '../../models/User';
-import { cadastroUsuario } from '../../services/Services';
+import { cadastroUsuario } from '../../services/Service';
 
 
 import { toast } from 'react-toastify';
@@ -70,7 +70,7 @@ function CadastroUsuario() {
 
         }else if (confirmarSenha === user.senha) {
             cadastroUsuario(`/usuarios/cadastrar`, user, setUserResult)
-            toast.success('🦄 Usuário cadastrado com sucesso!', {
+            toast.success(' Parabéns! Vou foi cadastrado.', {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
